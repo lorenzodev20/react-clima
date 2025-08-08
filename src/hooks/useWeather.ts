@@ -14,15 +14,17 @@ const Weather = z.object({
 
 export type Weather = z.infer<typeof Weather>;
 
+const initialState: Weather = {
+    name: '',
+    main: {
+        temp: 0,
+        temp_max: 0,
+        temp_min: 0,
+    }
+};
+
 export default function useWeather() {
-    const [weather, setWeather] = useState<Weather>({
-        name: '',
-        main: {
-            temp: 0,
-            temp_max: 0,
-            temp_min: 0,
-        }
-    });
+    const [weather, setWeather] = useState<Weather>(initialState);
 
     const [loading, setLoading] = useState(false);
     const [notFound, setNotFound] = useState(false);
@@ -66,13 +68,18 @@ export default function useWeather() {
             setTimeout(() => setNotFound(false), 5000);
         }
     }
+    
+    const resetState = () => setWeather(initialState);
 
     const hasWeatherData = useMemo(() => weather.name, [weather]);
+
+
     return {
         fetchWeather,
         hasWeatherData,
         loading,
         notFound,
+        resetState,
         weather,
         Weather,
     }

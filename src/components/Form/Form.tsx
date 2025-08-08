@@ -3,6 +3,7 @@ import { countries } from "../../data/countries";
 import styles from "./Form.module.css";
 import type { SearchType } from "../../types";
 import Alert from "../Alert/Alert";
+import useWeather from "../../hooks/useWeather";
 
 type FormProps = {
     fetchWeather: (search: SearchType) => Promise<void>
@@ -17,6 +18,8 @@ export default function Form({ fetchWeather }: Readonly<FormProps>) {
 
     const [alert, setAlert] = useState('');
 
+    const { resetState } = useWeather();
+
     const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         setSearch({
             ...search,
@@ -27,6 +30,8 @@ export default function Form({ fetchWeather }: Readonly<FormProps>) {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        resetState();
+        
         if (Object.values(search).includes('')) {
             console.log('Hay campos vacíos ...')
             setAlert('Los campos son obligatorios')
